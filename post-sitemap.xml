@@ -40,14 +40,6 @@
     </url>
 
     <url>
-        <loc>https://dipin.ink/2016/11/16/java-reflex-introspection/</loc>
-        <lastmod>2019-01-09T08:49:16.350Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
         <loc>https://dipin.ink/2015/07/14/java-io/</loc>
         <lastmod>2019-01-09T08:49:16.350Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -64,8 +56,8 @@
     </url>
 
     <url>
-        <loc>https://dipin.ink/2016/06/25/android-service/</loc>
-        <lastmod>2019-01-09T08:49:16.349Z</lastmod>
+        <loc>https://dipin.ink/2016/11/16/java-reflex-introspection/</loc>
+        <lastmod>2019-01-09T08:49:16.350Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -73,6 +65,14 @@
 
     <url>
         <loc>https://dipin.ink/2016/10/14/git-ssh/</loc>
+        <lastmod>2019-01-09T08:49:16.349Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://dipin.ink/2016/06/25/android-service/</loc>
         <lastmod>2019-01-09T08:49:16.349Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -104,7 +104,7 @@
     </url>
 
     <url>
-        <loc>https://dipin.ink/2016/06/27/android-broadcastReceiver/</loc>
+        <loc>https://dipin.ink/2016/06/28/android-contentProvider/</loc>
         <lastmod>2019-01-09T08:49:16.347Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -112,7 +112,7 @@
     </url>
 
     <url>
-        <loc>https://dipin.ink/2016/06/28/android-contentProvider/</loc>
+        <loc>https://dipin.ink/2016/06/27/android-broadcastReceiver/</loc>
         <lastmod>2019-01-09T08:49:16.347Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
