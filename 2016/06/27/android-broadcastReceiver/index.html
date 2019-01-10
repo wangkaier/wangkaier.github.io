@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="android,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="wangk's blog" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="Broadcast&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Android系统或应用程序会在产生某个事件时发送广播，比如网络状态改变、开机、电量改变和接收短信等。应用程序可以监听这些广播并做处理。">
+<meta name="keywords" content="android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android之Broadcast Receiver">
+<meta property="og:url" content="https://dipin.ink/2016/06/27/android-broadcastReceiver/index.html">
+<meta property="og:site_name" content="wangk&#39;s blog">
+<meta property="og:description" content="Broadcast&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Android系统或应用程序会在产生某个事件时发送广播，比如网络状态改变、开机、电量改变和接收短信等。应用程序可以监听这些广播并做处理。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-01-09T08:49:16.347Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android之Broadcast Receiver">
+<meta name="twitter:description" content="Broadcast&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Android系统或应用程序会在产生某个事件时发送广播，比如网络状态改变、开机、电量改变和接收短信等。应用程序可以监听这些广播并做处理。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://dipin.ink/2016/06/27/android-broadcastReceiver/">
+
+
+
+
+
+  <title>Android之Broadcast Receiver | wangk's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">wangk's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">think more,do more</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://dipin.ink/2016/06/27/android-broadcastReceiver/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wangk">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.ico">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wangk's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android之Broadcast Receiver</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-06-27T16:33:00+08:00">
+                2016-06-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="Broadcast"><a href="#Broadcast" class="headerlink" title="Broadcast"></a>Broadcast</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;Android系统或应用程序会在产生某个事件时发送广播，比如网络状态改变、开机、电量改变和接收短信等。应用程序可以监听这些广播并做处理。<br><a id="more"></a></p>
+<h3 id="Broadcast-Receiver"><a href="#Broadcast-Receiver" class="headerlink" title="Broadcast Receiver"></a>Broadcast Receiver</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;Broadcast Receiver是Android四大组件之一，用来接收并响应来自系统和应用中的广播。通常一个广播可以被多个广播接收者所接收。</p>
+<h3 id="Broadcast-Receiver的生命周期"><a href="#Broadcast-Receiver的生命周期" class="headerlink" title="Broadcast Receiver的生命周期"></a>Broadcast Receiver的生命周期</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;Broadcast Receiver的生命周期是从被调用开始，再到onReceiver方法执行完成之后结束。onReceiver方法必须在10秒内执行完成，否则Android系统会出现ANR（Application Not Responding）异常。所以不要在onReceiver方法中执行耗时的操作。如果需要在BroadcastReceiver中执行耗时的操作，可以通过Intent启动Service来完成，但不能绑定Service。</p>
+<h3 id="Broadcast的类型"><a href="#Broadcast的类型" class="headerlink" title="Broadcast的类型"></a>Broadcast的类型</h3><ul>
+<li><p>普通广播 (Normal broadcasts)<br>&nbsp;&nbsp;&nbsp;&nbsp;所有监听该广播的广播接收者都可以监听到该广播，并且是没有先后顺序。异步广播使其可以同一时间被所有的接收者接收到。广播的传递效率比较高，不能停止传播。</p>
+</li>
+<li><p>有序广播 (Ordered broadcasts)<br>&nbsp;&nbsp;&nbsp;&nbsp;按照广播接收者的优先级顺序接收广播 , 优先级别在 intent-filter 中的 priority 中声明 ，优先级在-1000 到1000 之间 ，值越大优先级越高 。接收者可以拦截广播，即终止广播的继续传播 。优先级高的广播接收者可以在广播中放入信息，传递给下一个广播接收者。</p>
+</li>
+<li><p>应用内广播（Local Broadcast）<br>&nbsp;&nbsp;&nbsp;&nbsp; 在本应用范围内传播的广播，不会造成隐私数据泄露，不会因为别的应用伪造广播而造成安全隐患。其相比在系统内发送全局广播，更高效。</p>
+</li>
+<li><p>粘性广播（Sticky Broadcast）<br>&nbsp;&nbsp;&nbsp;&nbsp;粘性广播在发送后，其Intent会一直保留到广播事件结束，这种广播也没有所谓的10秒耗时限制。发送粘性广播需要权限android.Manifest.permission.BROADCAST_STICKY。</p>
+</li>
+<li><p>系统广播（System Broadcast）<br>&nbsp;&nbsp;&nbsp;&nbsp;Android系统中内置了多种系统广播，每个广播都有特定的action，常用的系统广播对应的action如下：</p>
+</li>
+</ul>
+<h4 id="常用系统广播表："><a href="#常用系统广播表：" class="headerlink" title="常用系统广播表："></a>常用系统广播表：</h4><center><br><br>| 系统广播        | action|<br>| :————- |:—–|<br>| 设备启动(仅广播一次)    | Intent.ACTION_BOOT_COMPLETED|<br>| 重启设备    |     Intent.ACTION_REBOOT|<br>| 充电时或电量发生变化  |     Intent.ACTION_BATTERY_CHANGED|<br>| 电池电量低  |     Intent.ACTION_BATTERY_LOW|<br>| 电池电量充满    | Intent.ACTION_BATTERY_OKAY|<br>| 屏幕锁屏  |     Intent.ACTION_CLOSE_SYSTEM_DIALOGS|<br>| 屏幕被关闭  |     Intent.ACTION_SCREEN_OFF|<br>| 屏幕被打开  |     Intent.ACTION_SCREEN_ON|<br>| 关闭系统时  |     Intent.ACTION_SHUTDOWN|<br>| 按下照相时的拍照按键(硬件按键)时 |Intent.ACTION_CAMERA_BUTTON|<br>| 监听网络变化    | android.net.conn.CONNECTIVITY_CHANGE|<br>| 关闭或打开飞行模式  | Intent.ACTION_AIRPLANE_MODE_CHANGED|<br>| 设备当前设置被改变时    | Intent.ACTION_CONFIGURATION_CHANGED|<br>| 插入耳机时  |     Intent.ACTION_HEADSET_PLUG|<br>| 未正确移除SD卡但已取出来时(正确移除方法:设置–SD卡和设备内存–卸载SD卡)  |     Intent.ACTION_MEDIA_BAD_REMOVAL|<br>| 插入外部储存装置（如SD卡）  |     Intent.ACTION_MEDIA_CHECKING|<br>| 成功安装APK  |     Intent.ACTION_PACKAGE_ADDED|<br>| 成功卸载APK  |     Intent.ACTION_PACKAGE_REMOVED|<br>|在系统中添加一个快捷方式 |Intent.ADD_SHORTCUT_ACTION |<br>|列举所有可用的应用 | Intent.ALL_APPS_ACTION|<br>|处理拨入的电话 | Intent.ANSWER_ACTION |<br>|拨打电话，被呼叫的联系人在数据中指定 |Intent.CALL_ACTION|<br>|拨打紧急电话号码 |Intent.MERGENCY_DIAL_ACTION|<br>|日期改变 |Intent.DATE_CHANGED_ACTION|<br><br></center>
+
+
+<h3 id="BroadcastReceiver的创建"><a href="#BroadcastReceiver的创建" class="headerlink" title="BroadcastReceiver的创建"></a>BroadcastReceiver的创建</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;在我们要创建自己的BroadcastReceiver时，需要继承android.content.BroadcastReceiver，并实现其onReceive方法。代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.receiver;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.content.BroadcastReceiver;</span><br><span class="line"><span class="keyword">import</span> android.content.Intent;  </span><br><span class="line"><span class="keyword">import</span> android.util.Log; </span><br><span class="line"><span class="keyword">import</span> android.content.Context;  </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">public</span> class <span class="title">MyReceiver</span><span class="params">()</span> extends BroadcastReceiver</span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReceive</span><span class="params">(Context context, Intent intent)</span></span>&#123;</span><br><span class="line">		<span class="comment">//获取广播中携带的数据，有多种数据类型</span></span><br><span class="line">		String msg = intent.getStringExtra(<span class="string">"key"</span>); </span><br><span class="line">		Log.d(<span class="string">"MyReceiver:"</span>, <span class="string">"MyReceiver"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="BroadcastReceiver的注册"><a href="#BroadcastReceiver的注册" class="headerlink" title="BroadcastReceiver的注册"></a>BroadcastReceiver的注册</h3><p>BroadcastReceiver在创建后也需要先注册才能使用。在Android 的广播机制中,动态注册的BroadcastReceiver优先级是要高于静态注册。</p>
+<h4 id="①静态注册"><a href="#①静态注册" class="headerlink" title="①静态注册"></a>①静态注册</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;静态注册需要在AndroidManifest.xml文件中配置，代码如下：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">receiver</span> <span class="attr">android:name</span>=<span class="string">"com.example.receiver.MyReceiver"</span>&gt;</span>  </span><br><span class="line">      <span class="tag">&lt;<span class="name">intent-filter</span>&gt;</span>  </span><br><span class="line">             <span class="tag">&lt;<span class="name">action</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:name</span>=<span class="string">"android.intent.action.MY_BROADCAST"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:priority</span>=<span class="string">"999"</span> /&gt;</span> <span class="comment">&lt;!-- 设置最高优先级 --&gt;</span> </span><br><span class="line">             <span class="tag">&lt;<span class="name">category</span> <span class="attr">android:name</span>=<span class="string">"android.intent.category.DEFAULT"</span> /&gt;</span>  </span><br><span class="line">       <span class="tag">&lt;/<span class="name">intent-filter</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">receiver</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="②动态注册"><a href="#②动态注册" class="headerlink" title="②动态注册"></a>②动态注册</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;动态注册的属于常驻型，这个广播接收者会在程序运行的整个过程中一直存在，不会被注销掉，当程序被退出后不会再接收到该广播。动态注册需要在代码中设置IntentFilter和注册BroadcastReceiver，代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">MyReceiver myReceiver = <span class="keyword">new</span> MyReceiver();           </span><br><span class="line"><span class="comment">//创建IntentFilter </span></span><br><span class="line">IntentFilter intentFilter = <span class="keyword">new</span> IntentFilter();  </span><br><span class="line">intentFilter .addAction(<span class="string">"android.intent.action.MY_BROADCAST"</span>);  </span><br><span class="line"><span class="comment">//注册</span></span><br><span class="line">registerReceiver(myReceiver, intentFilter);</span><br></pre></td></tr></table></figure></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;动态注册的BroadcastReceiver跟随注册它组件相关联，所以在组件销毁时需要解除注册，否则系统会抛出一个异常。解除注册代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unregisterReceiver(myReceiver );</span><br></pre></td></tr></table></figure></p>
+<h3 id="发送Broadcast"><a href="#发送Broadcast" class="headerlink" title="发送Broadcast"></a>发送Broadcast</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;广播接收器介绍完呢，那怎么发送广播呢，代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Intent intent = <span class="keyword">new</span> Intent();  </span><br><span class="line">intent.setAction(<span class="string">"android.intent.action.MY_BROADCAST"</span>);</span><br><span class="line"><span class="comment">//在广播中放入数据，有多种参数类型的函数供使用</span></span><br><span class="line">intent.putExtra(<span class="string">"key"</span>, <span class="string">"value"</span>);</span><br><span class="line"><span class="comment">//发送普通广播</span></span><br><span class="line">sendBroadcast(intent);</span><br><span class="line"><span class="comment">//发送有序广播  </span></span><br><span class="line"><span class="comment">//receiverPermission为权限参数，如果为null则表示不要求接收者声明指定的权限，如果不为null，则表示接收者若要接收此广播，需声明指定权限。</span></span><br><span class="line">sendOrderedBroadcast(intent,receiverPermission);</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/android/" rel="tag"># android</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/25/android-service/" rel="next" title="Android之Service">
+                <i class="fa fa-chevron-left"></i> Android之Service
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/28/android-contentProvider/" rel="prev" title="Android之Content Provider">
+                Android之Content Provider <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.ico" alt="Wangk">
+            
+              <p class="site-author-name" itemprop="name">Wangk</p>
+              <p class="site-description motion-element" itemprop="description">think more,do more</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Broadcast"><span class="nav-number">1.</span> <span class="nav-text">Broadcast</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Broadcast-Receiver"><span class="nav-number">2.</span> <span class="nav-text">Broadcast Receiver</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Broadcast-Receiver的生命周期"><span class="nav-number">3.</span> <span class="nav-text">Broadcast Receiver的生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Broadcast的类型"><span class="nav-number">4.</span> <span class="nav-text">Broadcast的类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#常用系统广播表："><span class="nav-number">4.1.</span> <span class="nav-text">常用系统广播表：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BroadcastReceiver的创建"><span class="nav-number">5.</span> <span class="nav-text">BroadcastReceiver的创建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BroadcastReceiver的注册"><span class="nav-number">6.</span> <span class="nav-text">BroadcastReceiver的注册</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#①静态注册"><span class="nav-number">6.1.</span> <span class="nav-text">①静态注册</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#②动态注册"><span class="nav-number">6.2.</span> <span class="nav-text">②动态注册</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#发送Broadcast"><span class="nav-number">7.</span> <span class="nav-text">发送Broadcast</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wangk</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

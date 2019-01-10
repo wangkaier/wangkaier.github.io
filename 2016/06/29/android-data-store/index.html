@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="android,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="wangk's blog" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="下面将介绍Android的五种数据存储方式，包括文件存储、SharePreferences存储、SQLite数据库存储、ContentProvider存储、网络存储。">
+<meta name="keywords" content="android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android之五种数据存储方式">
+<meta property="og:url" content="https://dipin.ink/2016/06/29/android-data-store/index.html">
+<meta property="og:site_name" content="wangk&#39;s blog">
+<meta property="og:description" content="下面将介绍Android的五种数据存储方式，包括文件存储、SharePreferences存储、SQLite数据库存储、ContentProvider存储、网络存储。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-01-09T08:49:16.348Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android之五种数据存储方式">
+<meta name="twitter:description" content="下面将介绍Android的五种数据存储方式，包括文件存储、SharePreferences存储、SQLite数据库存储、ContentProvider存储、网络存储。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://dipin.ink/2016/06/29/android-data-store/">
+
+
+
+
+
+  <title>Android之五种数据存储方式 | wangk's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">wangk's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">think more,do more</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://dipin.ink/2016/06/29/android-data-store/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wangk">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.ico">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wangk's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android之五种数据存储方式</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-06-29T22:21:00+08:00">
+                2016-06-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>下面将介绍Android的五种数据存储方式，包括文件存储、SharePreferences存储、SQLite数据库存储、ContentProvider存储、网络存储。<br><a id="more"></a></p>
+<h3 id="1-文件存储"><a href="#1-文件存储" class="headerlink" title="1. 文件存储"></a>1. 文件存储</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;Android中的文件存储与java中IO存储类似，生成的文件在/data/data/&lt; package-name&gt;/files目录下。</p>
+<h4 id="1-1-写入文件"><a href="#1-1-写入文件" class="headerlink" title="1.1 写入文件"></a>1.1 写入文件</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;先调用Context.openFileOutput(filename, mode)方法，该方法会返回一个FileOutputStream对象，再通过FileOutputStream对象的write()方法写入数据，最后必须调用FileOutputStream对象的close()方法关闭流。<br>Context.openFileOutput(filename, mode)方法的两个参数中，file为文件名，namemode参数用于指定操作模式。</p>
+<h5 id="mode四种模式如下："><a href="#mode四种模式如下：" class="headerlink" title="mode四种模式如下："></a>mode四种模式如下：</h5><ul>
+<li>Context.MODE_PRIVATE   为默认操作模式，私有文件，且写入的内容会覆盖原文件的内容；</li>
+<li>Context.MODE_APPEND   该模式会检查文件是否存在，存在就在文件末尾追加内容，否则就创建新文件；　</li>
+<li>Context.MODE_WORLD_READABLE  表示当前文件可以被其他应用读取，但不能写；</li>
+<li>Context.MODE_WORLD_WRITEABLE 表示当前文件可以被其他应用读、写。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">String filename= <span class="string">"test.txt"</span>;</span><br><span class="line">String data= <span class="string">"123456abcdef"</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    FileOutputStream out= openFileOutput(filename, Context.MODE_PRIVATE);</span><br><span class="line">    out.write(data.getBytes());</span><br><span class="line">    <span class="comment">// 关闭流</span></span><br><span class="line">    out.close();</span><br><span class="line">&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="1-2-读取文件"><a href="#1-2-读取文件" class="headerlink" title="1.2 读取文件"></a>1.2 读取文件</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;先调用Context.openFileInput(filename)方法，该方法会返回一个FileInputStream对象。然后使用流对象的read()方法读取字节，最后必须调用流的close()方法关闭流。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">String filename = <span class="string">"test.txt"</span>;</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    FileInputStream in = openFileInput(filename);</span><br><span class="line">    <span class="keyword">int</span> len = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">byte</span>[] buf = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line">    StringBuilder sBuilder = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">    <span class="keyword">while</span> ((len = in.read(buf)) != -<span class="number">1</span>) &#123;</span><br><span class="line">        sBuilder.append(<span class="keyword">new</span> String(buf, <span class="number">0</span>, len));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 关闭流</span></span><br><span class="line">    in.close();</span><br><span class="line">&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-SharePreferences存储"><a href="#2-SharePreferences存储" class="headerlink" title="2. SharePreferences存储"></a>2. SharePreferences存储</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;SharePreferences使用键值对的方式来存储数据。这种方法适合保存少量的简单格式数据，如字符串型、基本类型的值。比如应用程序的配置信息，生成的数据文件保存为/data/data/&lt; package-name&gt;/shared_prefs/路径下的file_name.xml。<br>&nbsp;&nbsp;&nbsp;&nbsp;但SharedPreferences只能获取数据而不支持存储和修改,存储和修改需要通过SharedPreferences.edit()获取的内部接口Editor对象实现。SharedPreferences无法直接创建实例，只能通过Context.getSharedPreferences(String name, int mode)方法来获取SharedPreferences实例，该方法参数中name表示要操作的文件名，mode为操作模式。</p>
+<h4 id="mode操作模式："><a href="#mode操作模式：" class="headerlink" title="mode操作模式："></a>mode操作模式：</h4><ul>
+<li>Context.MODE_PRIVATE  数据只能被本应用读、写；</li>
+<li>Context.MODE_WORLD_READABLE  数据能被其他应用读，但不能写；</li>
+<li>Context.MODE_WORLD_WRITEABLE  数据能被其他应用读、写；</li>
+<li>Context.MODE_MULTI_PROCESS 数据可被多个程序共享,使用前会检查数据是否被更改。</li>
+</ul>
+<p>实例代码如下:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">SharedPreferences pref = Context.getSharedPreferences(<span class="string">"userdata"</span>,Context.MODE_PRIVATE);</span><br><span class="line">SharedPreferences.Editor editor= pref.edit();</span><br><span class="line"><span class="comment">//从SharedPreferences文件中以键名读取数据</span></span><br><span class="line">String account = pref.getString(<span class="string">"account"</span>,<span class="string">""</span>);</span><br><span class="line">String password = pref.getString(<span class="string">"password"</span>,<span class="string">""</span>);</span><br><span class="line"><span class="comment">//往SharedPreferences文件中以键值对形式写入数据</span></span><br><span class="line">editor.putString(<span class="string">"account"</span>, <span class="string">"xiaoming"</span>);</span><br><span class="line">editor.putString(<span class="string">"password"</span>, <span class="string">"123456"</span>);</span><br><span class="line"><span class="comment">//editor.clear(); 清除SharedPreferences文件中所有数据</span></span><br><span class="line"><span class="comment">//editor.remove(String key); 从SharedPreferences文件中以键名删除数据</span></span><br><span class="line"><span class="comment">//commit()提交修改</span></span><br><span class="line">editor.commit();</span><br></pre></td></tr></table></figure></p>
+<p>生成userdata.xml文件内容如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=”1.0″ encoding=”UTF-8″?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">map</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">string</span> <span class="attr">name</span>=<span class="string">"account"</span>&gt;</span>xiaoming<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">string</span> <span class="attr">name</span>=<span class="string">"password"</span>&gt;</span>123456<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">map</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="3-SQLite数据库存储"><a href="#3-SQLite数据库存储" class="headerlink" title="3. SQLite数据库存储"></a>3. SQLite数据库存储</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;SQLite是Android中的轻量级数据库，支持SQL语法。这种方式存储的数据在/data/data/&lt; package-name&gt;/database路径下。<br>①先创建一个DbOpenHelper 类，它继承android.database.sqlite.SQLiteDatabase，用于创建数据库和更新数据库。<br>代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.database;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.database.sqlite.SQLiteOpenHelper;</span><br><span class="line"><span class="keyword">import</span> android.content.Context;</span><br><span class="line"><span class="keyword">import</span> android.database.sqlite.SQLiteDatabase;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DbOpenHelper</span> <span class="keyword">extends</span> <span class="title">SQLiteOpenHelper</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String CREATE_MSG = <span class="string">"CREATE TABLE user_info("</span> +</span><br><span class="line">    		<span class="string">"user_id INTEGER PRIMARY KEY AUTOINCREMENT,"</span> +</span><br><span class="line">    		<span class="string">"user_name TEXT,"</span> +</span><br><span class="line">    		<span class="string">"user_sex  INT);"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">dbOpenHelper</span><span class="params">(Context context, String name, SQLiteDatabase.CursorFactory factory, <span class="keyword">int</span> version)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(context, name, factory, version);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * 创建数据库</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(SQLiteDatabase db)</span> </span>&#123;</span><br><span class="line">        db.execSQL(CREATE_MSG);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * 更新数据库版本</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onUpgrade</span><span class="params">(SQLiteDatabase db, <span class="keyword">int</span> oldVersion, <span class="keyword">int</span> newVersion)</span> </span>&#123;</span><br><span class="line">	    <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>②创建Db操作类，完成增删查改方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.database;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.content.ContentValues;</span><br><span class="line"><span class="keyword">import</span> android.content.Context;</span><br><span class="line"><span class="keyword">import</span> android.database.Cursor;</span><br><span class="line"><span class="keyword">import</span> android.database.sqlite.SQLiteDatabase;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserDb</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DB_VERSION = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> SQLiteDatabase db;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> UserDb msgDb;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> String DB_NAME = <span class="string">"user_info"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">UserDb</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        DbOpenHelper dbHelper = <span class="keyword">new</span> DbOpenHelper(context, DB_NAME, <span class="keyword">null</span>, DB_VERSION);</span><br><span class="line">        db = dbHelper.getWritableDatabase();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 获取数据库对象</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">synchronized</span> UserDb <span class="title">getInstance</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(msgDb == <span class="keyword">null</span>) &#123;</span><br><span class="line">            msgDb = <span class="keyword">new</span> UserDb(context);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> msgDb;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * 插入数据</span></span><br><span class="line"><span class="comment">     * User为自定义数据模型类，为该示例代码的数据类型,相关代码较为简单没有给出</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Boolean <span class="title">saveUser</span><span class="params">(User user)</span> </span>&#123;</span><br><span class="line">    	<span class="keyword">if</span>(user != <span class="keyword">null</span>) &#123;</span><br><span class="line">    		ContentValues values = <span class="keyword">new</span> ContentValues();</span><br><span class="line">			values.put(<span class="string">"user_name"</span>, user.getmUserName());</span><br><span class="line">    		values.put(<span class="string">"user_sex"</span>, user.getmUserSex());</span><br><span class="line">			<span class="keyword">try</span> &#123;</span><br><span class="line">				db.insert(<span class="string">"user_info"</span>, <span class="keyword">null</span>, values);</span><br><span class="line">				<span class="comment">// 也可以自己写SQL语句，用SQLiteDatabase.execSQL(SQL)执行</span></span><br><span class="line">				<span class="comment">// db.execSQL("insert into user_info(name, sex) values(?,?)", new String[]&#123;user.getmUserName(), user.getmUserSex()&#125;); </span></span><br><span class="line">			&#125; <span class="keyword">catch</span>(Exception e) &#123;</span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    	&#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * 查询数据</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;User&gt; <span class="title">queryUser</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    	ArrayList&lt;User&gt; list = <span class="keyword">new</span> ArrayList&lt;User&gt;();</span><br><span class="line">    	Cursor cursor = db.query(<span class="string">"user_info"</span>, <span class="keyword">null</span>, <span class="keyword">null</span>, <span class="keyword">null</span>, <span class="keyword">null</span>, <span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">    	<span class="comment">// 遍历返回的数据集</span></span><br><span class="line">    	<span class="keyword">if</span>(cursor.moveToFirst()) &#123;</span><br><span class="line">    		<span class="keyword">do</span> &#123;</span><br><span class="line">				User user = <span class="keyword">new</span> User();</span><br><span class="line">				user.setmUserId(cursor.getInt(cursor.getColumnIndex(<span class="string">"user_id"</span>)));</span><br><span class="line">				user.setmUserSex(cursor.getString(cursor.getColumnIndex(<span class="string">"user_sex"</span>)));</span><br><span class="line">				user.setmUserName(cursor.getString(cursor.getColumnIndex(<span class="string">"user_name"</span>)));</span><br><span class="line">				list.add(user);</span><br><span class="line">    		&#125; <span class="keyword">while</span>(cursor.moveToNext());</span><br><span class="line">    	&#125;</span><br><span class="line">    	<span class="comment">// 必须关闭cursor</span></span><br><span class="line">    	cursor.close();</span><br><span class="line">	<span class="keyword">return</span> list ;</span><br><span class="line">	</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * 删除数据</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">DelUser</span><span class="params">(String userId)</span> </span>&#123;</span><br><span class="line">    	<span class="keyword">try</span> &#123;</span><br><span class="line">			db.delete(<span class="string">"user_info"</span>, <span class="string">"user_id = ?"</span>, <span class="keyword">new</span> String[]&#123;userId&#125;);</span><br><span class="line">    	&#125; <span class="keyword">catch</span>(Exception e) &#123;</span><br><span class="line">    		e.printStackTrace();</span><br><span class="line">    		<span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    	&#125;</span><br><span class="line">    	<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * 更新数据</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">UpdateUser</span><span class="params">(User user)</span> </span>&#123;</span><br><span class="line">	    <span class="keyword">if</span>(user != <span class="keyword">null</span>) &#123;</span><br><span class="line">		    ContentValues values = <span class="keyword">new</span> ContentValues();</span><br><span class="line">			values.put(<span class="string">"user_name"</span>, user.getmUserName());</span><br><span class="line">	    	values.put(<span class="string">"user_sex"</span>, user.getmUserSex());</span><br><span class="line">	    	<span class="keyword">try</span> &#123;</span><br><span class="line">				db.update(<span class="string">"user_info"</span>, values, <span class="string">"user_id = ?"</span>, <span class="keyword">new</span> String[]&#123;user.getUserId&#125;);</span><br><span class="line">	    	&#125; <span class="keyword">catch</span>(Exception e) &#123;</span><br><span class="line">	    		e.printStackTrace();</span><br><span class="line">	    		<span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">	    	&#125;</span><br><span class="line">	    	<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">	    &#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>SQLiteDatabase提供的增删查改方法和SQL语句执行方法参数和返回值如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//插入数据</span></span><br><span class="line"><span class="function"><span class="keyword">long</span> <span class="title">insert</span><span class="params">(String table,String nullColumnHack,ContentValues values)</span></span></span><br><span class="line"><span class="function"><span class="comment">//删除数据</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">delete</span><span class="params">(String table,String whereClause,String[] whereArgs)</span></span></span><br><span class="line"><span class="function"><span class="comment">//查询数据</span></span></span><br><span class="line"><span class="function">Cursor <span class="title">query</span><span class="params">(String table, String[] columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy, String limit)</span></span></span><br><span class="line"><span class="function"><span class="comment">//更新数据</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">update</span><span class="params">(String table, ContentValues values, String whereClause, String[] whereArgs)</span></span></span><br><span class="line"><span class="function"><span class="comment">//执行SQL语句</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">execSQL</span><span class="params">(String sql)</span></span></span><br></pre></td></tr></table></figure></p>
+<h3 id="4-ContentProvider存储"><a href="#4-ContentProvider存储" class="headerlink" title="4. ContentProvider存储"></a>4. ContentProvider存储</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;ContentProvider（内容提供者）其为存储和获取数据提供统一的接口，使不同的应用程序之间可以共享数据。其以Uri的形式对外提供数据的访问操作接口，而其他应用则通过ContentResolver类对象根据Uri去访问指定的数据。<br><em>详情参考</em><a href="/2016/08/28/android-contentProvider/">《Android之ContentProvider》</a></p>
+<h3 id="5-网络存储"><a href="#5-网络存储" class="headerlink" title="5. 网络存储"></a>5. 网络存储</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;网络存储其实就是Android应用通过访问网络从服务器获取数据和存入数据，主要是掌握Android的网络访问。android.net.*包提供了网络访问方法，还有很多第三方网络访问框架，比如 Volley、OkHttp等。客户端与服务器通信的数据格式一般为JSON、XML和HTML，我们可以利用相关工具类进行转换。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/android/" rel="tag"># android</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/28/android-contentProvider/" rel="next" title="Android之Content Provider">
+                <i class="fa fa-chevron-left"></i> Android之Content Provider
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/07/01/android-fragment/" rel="prev" title="Android之Fragment">
+                Android之Fragment <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.ico" alt="Wangk">
+            
+              <p class="site-author-name" itemprop="name">Wangk</p>
+              <p class="site-description motion-element" itemprop="description">think more,do more</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-文件存储"><span class="nav-number">1.</span> <span class="nav-text">1. 文件存储</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-写入文件"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 写入文件</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#mode四种模式如下："><span class="nav-number">1.1.1.</span> <span class="nav-text">mode四种模式如下：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-2-读取文件"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.2 读取文件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-SharePreferences存储"><span class="nav-number">2.</span> <span class="nav-text">2. SharePreferences存储</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#mode操作模式："><span class="nav-number">2.1.</span> <span class="nav-text">mode操作模式：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-SQLite数据库存储"><span class="nav-number">3.</span> <span class="nav-text">3. SQLite数据库存储</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-ContentProvider存储"><span class="nav-number">4.</span> <span class="nav-text">4. ContentProvider存储</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-网络存储"><span class="nav-number">5.</span> <span class="nav-text">5. 网络存储</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wangk</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

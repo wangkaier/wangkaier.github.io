@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="android,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="wangk's blog" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="Service&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;服务（Service）是Android四大组件之一，其在后台执行长时间运行的操作，不提供用户界面。当启动一个服务，它将一直在后台运行，即使用户切换">
+<meta name="keywords" content="android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android之Service">
+<meta property="og:url" content="https://dipin.ink/2016/06/25/android-service/index.html">
+<meta property="og:site_name" content="wangk&#39;s blog">
+<meta property="og:description" content="Service&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;服务（Service）是Android四大组件之一，其在后台执行长时间运行的操作，不提供用户界面。当启动一个服务，它将一直在后台运行，即使用户切换">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://oznpemywy.bkt.clouddn.com/image/blog/android-service.png">
+<meta property="og:updated_time" content="2019-01-09T08:49:16.349Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android之Service">
+<meta name="twitter:description" content="Service&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;服务（Service）是Android四大组件之一，其在后台执行长时间运行的操作，不提供用户界面。当启动一个服务，它将一直在后台运行，即使用户切换">
+<meta name="twitter:image" content="http://oznpemywy.bkt.clouddn.com/image/blog/android-service.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://dipin.ink/2016/06/25/android-service/">
+
+
+
+
+
+  <title>Android之Service | wangk's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">wangk's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">think more,do more</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://dipin.ink/2016/06/25/android-service/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wangk">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.ico">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wangk's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android之Service</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-06-25T22:21:00+08:00">
+                2016-06-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="Service"><a href="#Service" class="headerlink" title="Service"></a>Service</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;服务（Service）是Android四大组件之一，其在后台执行长时间运行的操作，不提供用户界面。当启动一个服务，它将一直在后台运行，即使用户切换<br><a id="more"></a><br>到另一个应用程序。一个组件可以绑定到一个服务与它交互，甚至执行进程间通信(IPC)。默认情况下，服务是运行在启动它的应用程序的主线程中的。</p>
+<h3 id="Service的生命周期"><a href="#Service的生命周期" class="headerlink" title="Service的生命周期"></a>Service的生命周期</h3><ul>
+<li>onCreate()：当Service第一次创建时回调onCreate()。该方法只被回调一次。</li>
+<li>onStartCommand()：当其他组件调用startService()方法请求启动Service时回调onStartCommand()。Service启动后会一直在后台运行，即使用户切换到另一个应用程序或者启动它的组件被销毁了。当Service任务执行完以后，需自行调用stopSelf() 或 其他组件调用stopService()方法停止Service。</li>
+<li>onBind()：当其他组件调用bindService()方法请求绑定Service时回调onBind()。该方法返回一个IBinder接口，IBinder接口是Service与绑定的组件进行交互的桥梁。若Service未绑定其他组件，则该方法应返回null。</li>
+<li>onDestroy()：当Service被销毁时回调onDestroy()，在该方法中做一些释放资源的操作。<br>官方给出的Service的生命周期流程图如下：<center><br><img src="http://oznpemywy.bkt.clouddn.com/image/blog/android-service.png" alt="这里写图片描述"><br></center>
+
+</li>
+</ul>
+<h3 id="Service的基本类型"><a href="#Service的基本类型" class="headerlink" title="Service的基本类型"></a>Service的基本类型</h3><ul>
+<li>Started<br>&nbsp;&nbsp;&nbsp;&nbsp;当应用以startService()方法被启动时，服务就会开始在后台无限期的运行。通常一个启动的服务执行一个单一的操作而且不会返回结果给调用者。当这个动作执行完成的时候，服务应该停止。</li>
+<li>Bound<br>&nbsp;&nbsp;&nbsp;&nbsp;当应用以bindService()方法被启动时，服务就会被绑定。一个绑定的服务会提供一个客户端服务器接口，允许组件与服务进行交互，执行进程间通信(IPC)。绑定服务的生存期和被绑定的应用程序组件一致。</li>
+</ul>
+<h3 id="Service应用类型"><a href="#Service应用类型" class="headerlink" title="Service应用类型"></a>Service应用类型</h3><ul>
+<li>Local Service：<br>&nbsp;&nbsp;&nbsp;&nbsp;依附在主进程上的服务。</li>
+<li>Remote Service：<br>&nbsp;&nbsp;&nbsp;&nbsp;在一个独立进程上的服务。</li>
+<li>前台Service：<br>&nbsp;&nbsp;&nbsp;&nbsp;会在通知栏显示Notification。</li>
+<li>后台Service：<br>&nbsp;&nbsp;&nbsp;&nbsp;默认的服务。</li>
+<li>startService启动的Service：<br>&nbsp;&nbsp;&nbsp;&nbsp;以startService()方法被启动的服务。</li>
+<li>bindService启动的Service：<br>&nbsp;&nbsp;&nbsp;&nbsp;以bindService()方法绑定的服务。</li>
+<li>以startService启动后又使用bindService 绑定的Service：<br>&nbsp;&nbsp;&nbsp;&nbsp;该Service将会一直在后台运行，onCreate方法只会调用一次，onStartCommand的调用次数与startService调用的次数一致。只调用unBindService不会停止Service，必须再调用stopService或stopSelf来停止服务。</li>
+</ul>
+<h3 id="Service的创建"><a href="#Service的创建" class="headerlink" title="Service的创建"></a>Service的创建</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;创建一个服务需要新建一个Service的子类或一个已有Service子类的子类。再根据需求重写一些回调方法，用于对服务生命周期中的关键节点进行处理，以及向组件提供绑定机制。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">package</span> com.example.service;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.app.Service;</span><br><span class="line"><span class="keyword">import</span> android.content.Intent;</span><br><span class="line"><span class="keyword">import</span> android.os.Binder;</span><br><span class="line"><span class="keyword">import</span> android.os.IBinder;</span><br><span class="line"><span class="keyword">import</span> android.util.Log;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyService</span> <span class="keyword">extends</span> <span class="title">Service</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> MyBinder mBinder = <span class="keyword">new</span> MyBinder();</span><br><span class="line">  </span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	  <span class="keyword">super</span>.onCreate();</span><br><span class="line">	  <span class="comment">// 前台Service</span></span><br><span class="line">	  <span class="comment">// MyNotification myNotification = new MyNotification(this);</span></span><br><span class="line">	  <span class="comment">// startForeground(12345,myNotification.getNotification());</span></span><br><span class="line">	  <span class="comment">//关闭前台Service</span></span><br><span class="line">	  <span class="comment">//stopForeground(boolean removeNotification)</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">onStartCommand</span><span class="params">(Intent intent, <span class="keyword">int</span> flags, <span class="keyword">int</span> startId)</span> </span>&#123;</span><br><span class="line">      <span class="comment">//...</span></span><br><span class="line">      <span class="keyword">return</span> START_STICKY;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> IBinder <span class="title">onBind</span><span class="params">(Intent intent)</span> </span>&#123;</span><br><span class="line">      <span class="comment">// ...</span></span><br><span class="line">      <span class="comment">//以start方式启动返回null，以bound方式启动返回mBinder </span></span><br><span class="line">      <span class="comment">//return mBinder;</span></span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line">   <span class="meta">@Override</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onUnbind</span><span class="params">(Intent intent)</span> </span>&#123;</span><br><span class="line">	  <span class="comment">//...</span></span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">super</span>.onUnbind(intent);</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onDestroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	  <span class="comment">//...</span></span><br><span class="line">	  <span class="keyword">super</span>.onDestroy();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyBinder</span> <span class="keyword">extends</span> <span class="title">Binder</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> MyService <span class="title">getService</span><span class="params">()</span></span>&#123;</span><br><span class="line">            <span class="keyword">return</span> MyService.<span class="keyword">this</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">work</span><span class="params">()</span></span>&#123;</span><br><span class="line">	        <span class="comment">//...</span></span><br><span class="line">            Log.i(<span class="string">"MyService"</span>,<span class="string">"work"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="onStartCommand-方法的返回值该返回值描述了当系统kill掉该Service之后系统应该如何继续使用该Service。"><a href="#onStartCommand-方法的返回值该返回值描述了当系统kill掉该Service之后系统应该如何继续使用该Service。" class="headerlink" title="onStartCommand()方法的返回值该返回值描述了当系统kill掉该Service之后系统应该如何继续使用该Service。"></a>onStartCommand()方法的返回值该返回值描述了当系统kill掉该Service之后系统应该如何继续使用该Service。</h4><ul>
+<li><p>START_NOT_STICKY：如果在返回过onStartCommand()方法之后系统杀死了该Service，则该Service不会再被系统重建，除非有后续的intents。</p>
+</li>
+<li><p>START_STICKY：如果在返回过onStartCommand()方法之后系统杀死了该Service（此时记录该Service为started 状态），则之后系统会尝试重新创建该Service并创建之后一定调用onStartCommand()方法,但是不会传递最后一个Intent对象，而是用值为null的Intent对象，除非有后续的intents。</p>
+</li>
+<li><p>START_REDELIVER_INTENT：如果在返回过onStartCommand()方法之后系统杀死了该Service，则之后系统会重新创建该Service并调用onStartCommand()方法,且该Intent值为最后一次Intent对象。</p>
+</li>
+</ul>
+<h3 id="Service的注册"><a href="#Service的注册" class="headerlink" title="Service的注册"></a>Service的注册</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">service</span> <span class="attr">android:name</span>=<span class="string">"com.example.MyService"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="Service被started"><a href="#Service被started" class="headerlink" title="Service被started"></a>Service被started</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Intent intent = <span class="keyword">new</span> Intent(<span class="keyword">this</span>, MyService.class);</span><br><span class="line">startService(intent);</span><br></pre></td></tr></table></figure>
+<h3 id="Service被bound"><a href="#Service被bound" class="headerlink" title="Service被bound"></a>Service被bound</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Intent intent = <span class="keyword">new</span> Intent(<span class="keyword">this</span>, MyService.class);</span><br><span class="line">bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);</span><br><span class="line"></span><br><span class="line">ServiceConnection serviceConnection = <span class="keyword">new</span> ServiceConnection() &#123;</span><br><span class="line">	MyService.MyBinder binder = <span class="keyword">null</span>;</span><br><span class="line">	<span class="comment">//绑定成功时回调      　　　　</span></span><br><span class="line">　　<span class="meta">@Override</span></span><br><span class="line">　　<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onServiceConnected</span><span class="params">(ComponentName name, IBinder service)</span></span>&#123;</span><br><span class="line">           binder =(MyService.MyBinder)service;</span><br><span class="line">           binder.work();</span><br><span class="line">　　&#125;</span><br><span class="line">　　<span class="comment">//绑定失败时回调</span></span><br><span class="line">　　<span class="meta">@Override</span></span><br><span class="line">　　　　<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onServiceDisconnected</span><span class="params">(ComponentName name)</span> </span>&#123;</span><br><span class="line">　　　　　binder = <span class="keyword">null</span>;</span><br><span class="line">　　&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="stopService-Intent-intent"><a href="#stopService-Intent-intent" class="headerlink" title="stopService(Intent intent)"></a>stopService(Intent intent)</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stopService(intent);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>以start方式启动的Service，执行stopService后，Service回调onDestroy()方法被销毁。</li>
+<li>以bound方式启动的Service，执行stopService后，Service不回调且不会被销毁。</li>
+<li>以start方式启动的,然后在bind的Service，执行stopService后，Service不回调且不会被销毁。如果再执行unbindService方法，则Service先回调onUnbind，然后回调onDestroy()方法被销毁。</li>
+</ul>
+<h3 id="unbindService-ServiceConnection-conn"><a href="#unbindService-ServiceConnection-conn" class="headerlink" title="unbindService(ServiceConnection conn)"></a>unbindService(ServiceConnection conn)</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unbindService(serviceConnection);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>以bound方式启动的Service，执行unbindService后，Service先回调onUnbind，然后回调onDestroy()方法被销毁。</li>
+<li>以start方式启动的,然后再bind的Service，执行unbindService后，Service不回调且不会被销毁。如果再执行stopService方法，则Service先回调onUnbind，然后回调onDestroy()方法被销毁。</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/android/" rel="tag"># android</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/20/android-activity/" rel="next" title="Android之Activity">
+                <i class="fa fa-chevron-left"></i> Android之Activity
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/27/android-broadcastReceiver/" rel="prev" title="Android之Broadcast Receiver">
+                Android之Broadcast Receiver <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.ico" alt="Wangk">
+            
+              <p class="site-author-name" itemprop="name">Wangk</p>
+              <p class="site-description motion-element" itemprop="description">think more,do more</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Service"><span class="nav-number">1.</span> <span class="nav-text">Service</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Service的生命周期"><span class="nav-number">2.</span> <span class="nav-text">Service的生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Service的基本类型"><span class="nav-number">3.</span> <span class="nav-text">Service的基本类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Service应用类型"><span class="nav-number">4.</span> <span class="nav-text">Service应用类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Service的创建"><span class="nav-number">5.</span> <span class="nav-text">Service的创建</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#onStartCommand-方法的返回值该返回值描述了当系统kill掉该Service之后系统应该如何继续使用该Service。"><span class="nav-number">5.1.</span> <span class="nav-text">onStartCommand()方法的返回值该返回值描述了当系统kill掉该Service之后系统应该如何继续使用该Service。</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Service的注册"><span class="nav-number">6.</span> <span class="nav-text">Service的注册</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Service被started"><span class="nav-number">7.</span> <span class="nav-text">Service被started</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Service被bound"><span class="nav-number">8.</span> <span class="nav-text">Service被bound</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#stopService-Intent-intent"><span class="nav-number">9.</span> <span class="nav-text">stopService(Intent intent)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#unbindService-ServiceConnection-conn"><span class="nav-number">10.</span> <span class="nav-text">unbindService(ServiceConnection conn)</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wangk</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

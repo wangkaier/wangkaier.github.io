@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="python,爬虫,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="wangk's blog" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;网络爬虫早已不是什么新鲜事物了，我们也经常会用到它去爬取需要的信息。这里介绍一个python3的简单爬虫，主要用urllib库的request去访问网络">
+<meta name="keywords" content="python,爬虫">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python简单爬虫-1">
+<meta property="og:url" content="https://dipin.ink/2015/10/14/python-simpleSpider-1/index.html">
+<meta property="og:site_name" content="wangk&#39;s blog">
+<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;网络爬虫早已不是什么新鲜事物了，我们也经常会用到它去爬取需要的信息。这里介绍一个python3的简单爬虫，主要用urllib库的request去访问网络">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://oznpemywy.bkt.clouddn.com/image/blog/jpg/py_sp.jpg">
+<meta property="og:updated_time" content="2019-01-09T08:49:16.351Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python简单爬虫-1">
+<meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;网络爬虫早已不是什么新鲜事物了，我们也经常会用到它去爬取需要的信息。这里介绍一个python3的简单爬虫，主要用urllib库的request去访问网络">
+<meta name="twitter:image" content="http://oznpemywy.bkt.clouddn.com/image/blog/jpg/py_sp.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://dipin.ink/2015/10/14/python-simpleSpider-1/">
+
+
+
+
+
+  <title>python简单爬虫-1 | wangk's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">wangk's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">think more,do more</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://dipin.ink/2015/10/14/python-simpleSpider-1/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wangk">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.ico">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wangk's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">python简单爬虫-1</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-10-14T08:28:00+08:00">
+                2015-10-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;网络爬虫早已不是什么新鲜事物了，我们也经常会用到它去爬取需要的信息。这里介绍一个python3的简单爬虫，主要用urllib库的request去访问网络<a id="more"></a><br>、bs4库的BeautifulSoup去过滤信息。</p>
+<h3 id="1-观察目标网页"><a href="#1-观察目标网页" class="headerlink" title="1.观察目标网页"></a>1.观察目标网页</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;如果我们需要爬取一个网页中的文字、图片、链接等信息，就需要先去在网页源码中找到需要信息所在的标签。因为我们的爬取过程是先获取整个网页HTML，然后过滤出目标标签，再从标签中提取信息，所以需要先知道目标信息所在的标签。<br>&nbsp;&nbsp;&nbsp;&nbsp;假如我们要获取豆瓣电影的电影信息，首先在浏览器中查看网页源码，一般按<strong>快捷键F12</strong>就可以查看。</p>
+<h3 id="2-获取网页内容"><a href="#2-获取网页内容" class="headerlink" title="2.获取网页内容"></a>2.获取网页内容</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;使用request访问网页获取HTML内容，为了防止被网站屏蔽，可以通过设置消息头简单模拟成浏览器的访问。<br>浏览器在访问时设置的请求头如下：</p>
+<p><center><br><img src="http://oznpemywy.bkt.clouddn.com/image/blog/jpg/py_sp.jpg" alt="这里写图片描述"><br></center><br>获取网页代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlopen, Request</span><br><span class="line"><span class="keyword">from</span> urllib.error <span class="keyword">import</span> HTTPError, URLError</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getHtml</span><span class="params">(url)</span>:</span></span><br><span class="line">    headers = &#123;  </span><br><span class="line">                    <span class="string">'User-Agent'</span>:<span class="string">'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko)Chrome/48.0.2564.116 Safari/537.36'</span>，</span><br><span class="line">                    <span class="string">'Accept'</span>:<span class="string">'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'</span>,</span><br><span class="line">                    <span class="string">'Accept-Language'</span>:<span class="string">'zh-CN,zh;q=0.8'</span>,</span><br><span class="line">                    <span class="string">'Connection'</span>:<span class="string">'keep-alive'</span>,</span><br><span class="line">                    <span class="string">'Host'</span>:<span class="string">'movie.douban.com'</span>,</span><br><span class="line">                    <span class="string">'Upgrade-Insecure-Requests'</span>:<span class="string">'1'</span>,</span><br><span class="line">                    <span class="string">'Referer'</span>:<span class="string">'https://movie.douban.com'</span></span><br><span class="line">                &#125;</span><br><span class="line">    <span class="comment"># 设置headers</span></span><br><span class="line">    req = Request(url, headers = my_headers)</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">	<span class="comment">#发送请求</span></span><br><span class="line">        response = urlopen(req)</span><br><span class="line">	<span class="comment">#读取返回结果</span></span><br><span class="line">        content = response.read()</span><br><span class="line">        response.close() </span><br><span class="line">    <span class="keyword">except</span> HTTPError <span class="keyword">as</span> e:</span><br><span class="line">	<span class="comment">#服务器返回错误，具体可看e.code代码</span></span><br><span class="line">        print(<span class="string">"HTTPError:"</span>, url, e.code)</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">None</span></span><br><span class="line">    <span class="keyword">except</span> URLError <span class="keyword">as</span> e:</span><br><span class="line">	<span class="comment">#找不到URL指定主机或无法联网</span></span><br><span class="line">        print(<span class="string">"UrlErrorurl:"</span>, url, e.reason)</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">None</span></span><br><span class="line">    <span class="keyword">return</span> content</span><br></pre></td></tr></table></figure>
+<h3 id="3-过滤目标内容标签"><a href="#3-过滤目标内容标签" class="headerlink" title="3.过滤目标内容标签"></a>3.过滤目标内容标签</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;在第一步我们获取到了整个网页的信息，但我们只需要一部分，bs4库的BeautifulSoup可以帮助我们找出目标内容所在的标签。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getMovies</span><span class="params">(url)</span>:</span></span><br><span class="line">	html = getHtml(url)</span><br><span class="line">	<span class="keyword">if</span>(html != <span class="keyword">None</span>):</span><br><span class="line">	    <span class="keyword">try</span>:</span><br><span class="line">		<span class="comment">#创建beautifulsoup对象</span></span><br><span class="line">	        bsObj = BeautifulSoup(html, <span class="string">'html.parser'</span>)</span><br><span class="line">	        <span class="comment"># 找到html中第一个属性class为lists的ul标签中的所有属性class为list-item的li标签，返回列表</span></span><br><span class="line">	        movies = bsObj.find(<span class="string">'ul'</span>, &#123;<span class="string">"class"</span> : <span class="string">"lists"</span>&#125;).findAll(<span class="string">'li'</span>, &#123;<span class="string">"class"</span> : <span class="string">"list-item"</span>&#125;)</span><br><span class="line">	    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">	        <span class="keyword">return</span> <span class="keyword">None</span></span><br><span class="line">	    <span class="keyword">return</span> movies</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">None</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="4-从目标标签中获取目标内容"><a href="#4-从目标标签中获取目标内容" class="headerlink" title="4.从目标标签中获取目标内容"></a>4.从目标标签中获取目标内容</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;在获取到目标内容所在标签后，从标签中提取信息，写入文件或者存入数据库。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">movies = getMovies(url)</span><br><span class="line"><span class="keyword">for</span> movie <span class="keyword">in</span> movies:</span><br><span class="line">	<span class="comment"># 从标签中获取'data-title'属性，movie_name为'悟空传'</span></span><br><span class="line">	movie_name = movie.attrs[<span class="string">'data-title'</span>]</span><br><span class="line">	</span><br><span class="line">	<span class="comment"># 从标签中获取'data-duration'属性，data-duration为'123分钟'</span></span><br><span class="line">	movie_length = movie.attrs[<span class="string">'data-duratione'</span>]</span><br><span class="line">	</span><br><span class="line">	<span class="comment"># 写入文件</span></span><br><span class="line">	filename = os.path.join(file_path, file_name)</span><br><span class="line">	<span class="keyword">with</span> open(filename,<span class="string">'a+'</span>) <span class="keyword">as</span> f:</span><br><span class="line">	    f.write(movie_name)</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+            <a href="/tags/爬虫/" rel="tag"># 爬虫</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/07/14/java-io/" rel="next" title="Java之输入输出流">
+                <i class="fa fa-chevron-left"></i> Java之输入输出流
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/12/14/algorithm-md5/" rel="prev" title="MD5加密算法">
+                MD5加密算法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.ico" alt="Wangk">
+            
+              <p class="site-author-name" itemprop="name">Wangk</p>
+              <p class="site-description motion-element" itemprop="description">think more,do more</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-观察目标网页"><span class="nav-number">1.</span> <span class="nav-text">1.观察目标网页</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-获取网页内容"><span class="nav-number">2.</span> <span class="nav-text">2.获取网页内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-过滤目标内容标签"><span class="nav-number">3.</span> <span class="nav-text">3.过滤目标内容标签</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-从目标标签中获取目标内容"><span class="nav-number">4.</span> <span class="nav-text">4.从目标标签中获取目标内容</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wangk</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
