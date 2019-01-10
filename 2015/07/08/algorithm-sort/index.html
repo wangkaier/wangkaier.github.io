@@ -12,7 +12,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="theme-color" content="#222">
 
+<script>
+    (function(){
+        if(''){
+            if (prompt('请输入文章密码') !== ''){
+                alert('密码错误！');
+                history.back();
+            }
+        }
+    })();
+</script>
 
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
 
 
 
@@ -147,7 +164,8 @@
 </head>
 
 <body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
-
+  
+  
   
   
     
@@ -155,8 +173,12 @@
 
   <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
+<!--	
+	<a href="https://github.com/wangkaier"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/652c5b9acfaddf3a9c326fa6bde407b87f7be0f4/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6f72616e67655f6666373630302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png"></a>
 
+-->
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
@@ -256,7 +278,7 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+      <input autocomplete="off" placeholder="站内搜索" spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -454,6 +476,18 @@
     
     
 
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束,感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+
+
     
 
     
@@ -467,7 +501,9 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
+    
     <a href="https://dipin.ink/2015/07/08/algorithm-sort/" title="常用排序算法">https://dipin.ink/2015/07/08/algorithm-sort/</a>
+   
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -478,13 +514,14 @@
       </div>
     
 
+
     <footer class="post-footer">
       
         <div class="post-tags">
           
-            <a href="/tags/排序/" rel="tag"># 排序</a>
+            <a href="/tags/排序/" rel="tag"><i class="fa fa-tag"></i> 排序</a>
           
-            <a href="/tags/算法/" rel="tag"># 算法</a>
+            <a href="/tags/算法/" rel="tag"><i class="fa fa-tag"></i> 算法</a>
           
         </div>
       
@@ -655,6 +692,16 @@
           
 
           
+  <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+  <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+  <div class="widget-wrap">
+      <h4 class="widget-title">标签云</h4>
+      <div id="myCanvasContainer" class="widget tagcloud">
+          <canvas width="250" height="250" id="resCanvas" style="width=100%">
+              <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/io/">io</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/md5/">md5</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ngin/">ngin</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/servlet/">servlet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssh/">ssh</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/报错/">报错</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/排序/">排序</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/爬虫/">爬虫</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">1</span></li></ul>
+          </canvas>
+      </div>
+  </div>
 
         </div>
       </section>
@@ -699,7 +746,9 @@
 </div>
 
 
-  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动<span class="post-meta-divider">|</span>Hosted by <a href="https://pages.coding.me" style="">Coding Pages</a>
+ </div>
+
 
 
 
@@ -848,26 +897,10 @@
 
 
   <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
-  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  <!-- <script src="//unpkg.com/valine/dist/Valine.min.js"></script> -->
+  <script src="//cdn.jsdelivr.net/npm/valine/dist/Valine.min.js"></script>
   
-  <script type="text/javascript">
-    var GUEST = ['nick','mail','link'];
-    var guest = 'nick,mail,link';
-    guest = guest.split(',').filter(item=>{
-      return GUEST.indexOf(item)>-1;
-    });
-    new Valine({
-        el: '#comments' ,
-        verify: false,
-        notify: false,
-        appId: 'eHycWsT21HmSm9zHNd41x3C0-gzGzoHsz',
-        appKey: 'Y1wYm0hyI3TimPKGNOJegzfv',
-        placeholder: '指点一二三',
-        avatar:'identicon',
-        guest_info:guest,
-        pageSize:'10' || 10,
-    });
-  </script>
+  <script type="text/javascript">var GUEST = ['nick','mail','link'];var guest = 'nick,mail,link';guest = guest.split(',').filter(item=>{return GUEST.indexOf(item)>-1;});new Valine({el: '#comments' ,verify: false,notify: false,appId: 'eHycWsT21HmSm9zHNd41x3C0-gzGzoHsz',appKey: 'Y1wYm0hyI3TimPKGNOJegzfv',placeholder: '指点一二三',avatar:'identicon',guest_info:guest,pageSize:'10' || 10, });</script>
 
 
 

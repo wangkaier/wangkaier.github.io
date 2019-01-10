@@ -8,6 +8,14 @@
     </url>
 
     <url>
+        <loc>https://dipin.ink/2016/10/14/git-ssh/</loc>
+        <lastmod>2019-01-10T03:13:25.245Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
         <loc>https://dipin.ink/2016/03/22/web-servlet-forword-redirect/</loc>
         <lastmod>2019-01-09T08:49:16.352Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -24,7 +32,7 @@
     </url>
 
     <url>
-        <loc>https://dipin.ink/2015/01/14/test/</loc>
+        <loc>https://dipin.ink/2016/10/04/server-nginx-startError-nginx.pid/</loc>
         <lastmod>2019-01-09T08:49:16.351Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -32,7 +40,7 @@
     </url>
 
     <url>
-        <loc>https://dipin.ink/2016/10/04/server-nginx-startError-nginx.pid/</loc>
+        <loc>https://dipin.ink/2015/01/14/test/</loc>
         <lastmod>2019-01-09T08:49:16.351Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -58,14 +66,6 @@
     <url>
         <loc>https://dipin.ink/2016/11/16/java-reflex-introspection/</loc>
         <lastmod>2019-01-09T08:49:16.350Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>https://dipin.ink/2016/10/14/git-ssh/</loc>
-        <lastmod>2019-01-09T08:49:16.349Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 

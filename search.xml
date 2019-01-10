@@ -14,7 +14,7 @@
   <entry>
     <title><![CDATA[Git配置SSH以及常见问题]]></title>
     <url>%2F2016%2F10%2F14%2Fgit-ssh%2F</url>
-    <content type="text"><![CDATA[一、Git配置SSH1、生成ssh秘钥先在~/.ssh/下查看有无秘钥，没有则ssh-keygen生成。参数 -t 指定密钥类型，默认是 rsa。参数 -C 设置注释文字，比如邮箱。 1$ ssh-keygen -t rsa -C &quot;email@mail.com&quot; 成功后会在~/ssh/下生成id_rsa、id_rsa.pub，前者为私钥，后者为公钥. 2、测试ssh连接git@github.com 1$ ssh -T git@github.com 显示You’ve successfully authenticated就是成功了。 3、在github上添加SSH Key用公钥内容在你的github（网页登录）上新建key，在settings中SSH and GPG keys点击New SSH key去新建。 4、配置本地git参数参数 –global 表示全局，–local 表示当前， –system表示系统 12$ git config --global user.name "your name"$ git config --global user.email "your email" ok，下次提交代码就不用输入姓名密码了！ 二、常见问题1、ssh可以测试连通github.com，但push时仍要输入账户和密码验证 原因：git push方式为https，即在克隆仓库或者添加仓库源时url为https://形式。 https使用账号密码验证身份，ssh使用ssh验证身份，如果使用ssh克隆仓库必须事前已添加ssh key。 解决：修改为ssh方式，即将仓库源设置为git@github.com:gitname/remotename.git。 两种方法:①、在.git/config中修改url1url=git@github.com:gitname/remotename.git ②、命令修改remote.origin.url1$ git config --replace-all remote.origin.url git@github.com:username/remotename.git 查看git config1$ git config --list 2、ssh: Could not resolve hostname ssh.github.com: Name or service not known 原因：无法解析主机名ssh.github.com。 解决：ssh测试连通github.com。方法： 1$ ssh -T git@github.com]]></content>
+    <content type="text"><![CDATA[一、Git配置SSH1、生成ssh秘钥先在~/.ssh/下查看有无秘钥，没有则ssh-keygen生成。参数 -t 指定密钥类型，默认是 rsa。参数 -C 设置注释文字，比如邮箱。 1$ ssh-keygen -t rsa -C &quot;email@mail.com&quot; 成功后会在~/ssh/下生成id_rsa、id_rsa.pub，前者为私钥，后者为公钥. 2、在github上添加SSH Key用公钥内容在你的github（网页登录）上新建key，在settings中SSH and GPG keys点击New SSH key去新建。3、测试ssh连接git@github.com 1$ ssh -T git@github.com 显示You’ve successfully authenticated就是成功了。4、配置本地git参数参数 –global 表示全局，–local 表示当前， –system表示系统 12$ git config --global user.name "your name"$ git config --global user.email "your email" ok，下次提交代码就不用输入姓名密码了！ 二、常见问题1、ssh可以测试连通github.com，但push时仍要输入账户和密码验证 原因：git push方式为https，即在克隆仓库或者添加仓库源时url为https://形式。 https使用账号密码验证身份，ssh使用ssh验证身份，如果使用ssh克隆仓库必须事前已添加ssh key。 解决：修改为ssh方式，即将仓库源设置为git@github.com:gitname/remotename.git。 两种方法:①、在.git/config中修改url1url=git@github.com:gitname/remotename.git ②、命令修改remote.origin.url1$ git config --replace-all remote.origin.url git@github.com:username/remotename.git 查看git config1$ git config --list 2、ssh: Could not resolve hostname ssh.github.com: Name or service not known 原因：无法解析主机名ssh.github.com。 解决：ssh测试连通github.com。方法： 1$ ssh -T git@github.com]]></content>
       <categories>
         <category>Git</category>
       </categories>
@@ -120,8 +120,8 @@
         <category>Java</category>
       </categories>
       <tags>
-        <tag>java</tag>
         <tag>mysql</tag>
+        <tag>java</tag>
       </tags>
   </entry>
   <entry>
